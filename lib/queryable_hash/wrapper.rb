@@ -9,19 +9,17 @@ module QueryableHash
     end
 
     def find(*queries, nil_value: nil)
-      context = nil
-
-      queries.each do |query|
+      results = queries.reduce([]) do |memo, query|
         context = self
         query.split(".").each do |name|
           break if context.nil?
           context = context[name.to_sym] || context[name]
         end
-
-        context = nil_value if context.nil? && query == queries.last
+        memo << context
       end
 
-      context
+      return results.first if queries.length == 1
+      results
     end
 
     def to_hash

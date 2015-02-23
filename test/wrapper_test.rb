@@ -8,6 +8,17 @@ module QueryableHash
       assert queryable.find("foo.bar.baz") == true
     end
 
+    test "queries" do
+      hash = { foo: { "bar" => { baz: true } } }
+      queryable = QueryableHash::wrap(hash)
+      results = queryable.find("foo", "foo.bar", "foo.bar.baz")
+      assert results == [
+        { "bar" => { baz: true } },
+        { baz: true },
+        true
+      ]
+    end
+
     test "to_hash" do
       hash = { foo: { bar: { baz: true } } }
       queryable = QueryableHash.wrap(hash)
