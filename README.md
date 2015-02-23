@@ -6,32 +6,111 @@
 
 # QueryableHash
 
-TODO: Write a gem description
+Safely & easily find data in Hashes using a dot style query.
 
-## Installation
+> We use QueryableHash to parse Ruby Hashes built from JSON API data.
 
-Add this line to your application's Gemfile:
+## Examples
+
+### Hash to Query
 
 ```ruby
-gem 'queryable_hash'
+data = {
+  glossary: {
+    title: "example glossary",
+    gloss_div: {
+      title: "S",
+      gloss_list: {
+        gloss_entry: {
+          id: "SGML",
+          sort_as: "SGML",
+          gloss_term: "Standard Generalized Markup Language",
+          acronym: "SGML",
+          abbrev: "ISO 8879:1986",
+          gloss_def: {
+            para: "A meta-markup language, used to create markup languages such as DocBook.",
+            gloss_see_also: ["GML", "XML"]
+          },
+          gloss_see: "markup"
+        }
+      }
+    }
+  }
+}
 ```
 
-And then execute:
+### Find first match
 
-    $ bundle
+```ruby
+queryable = QueryableHash.wrap(data)
+queryable.find_first(
+  "glossary.gloss_div.gloss_list.gloss_entry.id"
+)
 
-Or install it yourself as:
+# "SGML"
+```
 
-    $ gem install queryable_hash
+### Find first using multiple queries
 
-## Usage
+```ruby
+queryable = QueryableHash.wrap(data)
+queryable.find_first(
+  "this.key.does.not.exist",
+  "glossary.gloss_div.gloss_list.gloss_entry.id"
+)
 
-TODO: Write usage instructions here
+# "SGML"
+```
 
-## Contributing
+### Find all matches
 
-1. Fork it ( https://github.com/[my-github-username]/queryable_hash/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+```ruby
+queryable = QueryableHash.wrap(data)
+queryable.find_all(
+  "glossary.title",
+  "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
+  "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
+)
+
+# ["example glossary",
+#  "Standard Generalized Markup Language",
+#  "A meta-markup language, used to create markup languages such as DocBook."]
+```
+
+### Extract multiple values at once
+
+```ruby
+queryable = QueryableHash.wrap(data)
+title, term, para = queryable.find_all(
+  "glossary.title",
+  "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
+  "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
+)
+
+title # "example glossary",
+term  # "Standard Generalized Markup Language"
+param # "A meta-markup language, used to create markup languages such as DocBook."
+```
+
+### Find deeply nested missing key
+
+```ruby
+queryable = QueryableHash.wrap(data)
+queryable.find_first(
+  "this.key.does.not.exist"
+)
+
+# nil
+```
+
+### Assign a custom value to represent nil
+
+```ruby
+queryable = QueryableHash.wrap(data)
+queryable.find_first(
+  "this.key.does.not.exist",
+  nil_value: "missing")
+)
+
+# "missing"
+```

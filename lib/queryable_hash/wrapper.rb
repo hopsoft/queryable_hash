@@ -8,18 +8,22 @@ module QueryableHash
       super hash
     end
 
-    def find(*queries, nil_value: nil)
-      results = queries.reduce([]) do |memo, query|
+    def find_all(*queries, nil_value: nil)
+      queries.reduce([]) do |memo, query|
         context = self
         query.split(".").each do |name|
           break if context.nil?
           context = context[name.to_sym] || context[name]
         end
-        memo << context
+        memo << (context || nil_value)
       end
+    end
 
-      return results.first if queries.length == 1
-      results
+    def find_first(*queries, nil_value: nil)
+      first = find_all(*queries, nil_value: nil_value).find do |result|
+        result != nil_value
+      end
+      first || nil_value
     end
 
     def to_hash
