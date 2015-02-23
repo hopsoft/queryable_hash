@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = QueryableHash::VERSION
   spec.authors       = ["Nathan Hopkins"]
   spec.email         = ["natehop@gmail.com"]
-  spec.summary       = "Makes hashes queryable with a simple dot query."
-  spec.description   = "Makes hashes queryable with a simple dot query."
+  spec.summary       = "Safely & easily find data in Hashes using dot notation queries."
+  spec.description   = "Safely & easily find data in Hashes using dot notation queries."
   spec.homepage      = "https://github.com/hopsoft/queryable_hash"
   spec.license       = "MIT"
 

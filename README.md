@@ -6,7 +6,7 @@
 
 # QueryableHash
 
-Safely & easily find data in Hashes using a dot style query.
+Safely & easily find data in Hashes using dot notation queries.
 _Works with string & symbol keys._
 
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
