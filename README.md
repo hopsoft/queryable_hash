@@ -1,4 +1,4 @@
-[![Lines of Code](http://img.shields.io/badge/lines_of_code-34-brightgreen.svg?style=flat)](http://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
+[![Lines of Code](http://img.shields.io/badge/lines_of_code-38-brightgreen.svg?style=flat)](http://blog.codinghorror.com/the-best-code-is-no-code-at-all/)
 [![Code Status](http://img.shields.io/codeclimate/github/hopsoft/queryable_hash.svg?style=flat)](https://codeclimate.com/github/hopsoft/queryable_hash)
 [![Dependency Status](http://img.shields.io/gemnasium/hopsoft/queryable_hash.svg?style=flat)](https://gemnasium.com/hopsoft/queryable_hash)
 [![Build Status](http://img.shields.io/travis/hopsoft/queryable_hash.svg?style=flat)](https://travis-ci.org/hopsoft/queryable_hash)
@@ -7,12 +7,13 @@
 # QueryableHash
 
 Safely & easily find data in Hashes using a dot style query.
+_Works with string & symbol keys._
 
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
 
 ## Examples
 
-### Hash to Query
+### Data to Query
 
 ```ruby
 data = {
