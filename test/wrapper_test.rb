@@ -1,4 +1,4 @@
-require_relative "../lib/queryable_hash"
+require_relative "test_helper"
 
 module QueryableHash
   class QueryableHashTest < PryTest::Test
