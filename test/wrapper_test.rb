@@ -68,7 +68,7 @@ module QueryableHash
       assert @queryable.find_first(query, nil_value: "missing") == "missing"
     end
 
-    test "find_first with multiple queries" do
+    test "find_first with multiple queries some invalid" do
       term = @queryable.find_first(
         "glossary.div.list.entry.term",
         "glossary.gloss_div.list.entry.term",
