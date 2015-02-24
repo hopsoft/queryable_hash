@@ -49,6 +49,15 @@ module QueryableHash
       assert @queryable.find_first(query) == "SGML"
     end
 
+    test "find_first with multiple queries" do
+      result = @queryable.find_first(
+        "glossary.title",
+        "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
+        "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
+      )
+      assert result == "example glossary"
+    end
+
     test "find_first with missing key" do
       query = "this.key.does.not.exist"
       assert @queryable.find_first(query).nil?
