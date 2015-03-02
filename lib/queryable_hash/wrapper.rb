@@ -31,7 +31,7 @@ module QueryableHash
       end
       first ||= nil_value
 
-      raise NotFoundError if raise_when_nil && first == nil_value
+      raise NotFoundError.new("#{queries.join(", ")} not found") if raise_when_nil && first == nil_value
       first
     end
 
