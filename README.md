@@ -10,6 +10,7 @@ Safely & easily find data in Hashes using dot notation queries.
 _Works with string & symbol keys._
 
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
+> It works especially well when the target API data is erratic.
 
 ## Examples
 
@@ -44,23 +45,17 @@ data = {
 
 ```ruby
 queryable = QueryableHash.wrap(data)
-queryable.find_first(
-  "glossary.gloss_div.gloss_list.gloss_entry.id"
-)
+queryable.find_first("glossary.gloss_div.gloss_list.gloss_entry.id") #=> "SGML"
 
-# "SGML"
+# or simply
+queryable.find("glossary.gloss_div.gloss_list.gloss_entry.id") #=> "SGML"
 ```
 
-### Find first using multiple queries
+### Find first match using multiple queries
 
 ```ruby
 queryable = QueryableHash.wrap(data)
-queryable.find_first(
-  "this.key.does.not.exist",
-  "glossary.gloss_div.gloss_list.gloss_entry.id"
-)
-
-# "SGML"
+queryable.find("this.key.does.not.exist", "glossary.gloss_div.gloss_list.gloss_entry.id") #=> "SGML"
 ```
 
 ### Find all matches
@@ -72,10 +67,9 @@ queryable.find_all(
   "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
   "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
 )
-
-# ["example glossary",
-#  "Standard Generalized Markup Language",
-#  "A meta-markup language, used to create markup languages such as DocBook."]
+#=> [ "example glossary",
+#     "Standard Generalized Markup Language",
+#     "A meta-markup language, used to create markup languages such as DocBook." ]
 ```
 
 ### Extract multiple values at once
@@ -87,31 +81,45 @@ title, term, para = queryable.find_all(
   "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
   "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
 )
-
-title # "example glossary",
-term  # "Standard Generalized Markup Language"
-param # "A meta-markup language, used to create markup languages such as DocBook."
+title #=> "example glossary",
+term  #=> "Standard Generalized Markup Language"
+param #=> "A meta-markup language, used to create markup languages such as DocBook."
 ```
 
 ### Find deeply nested missing key
 
 ```ruby
 queryable = QueryableHash.wrap(data)
-queryable.find_first(
-  "this.key.does.not.exist"
-)
-
-# nil
+queryable.find_first("this.key.does.not.exist") #=> nil
 ```
 
 ### Assign a custom value to represent nil
 
 ```ruby
 queryable = QueryableHash.wrap(data)
-queryable.find_first(
-  "this.key.does.not.exist",
-  nil_value: "missing")
-)
-
-# "missing"
+queryable.find_first("this.key.does.not.exist", nil_value: "missing") #=> "missing"
 ```
+
+### Raise an error when not found
+
+```ruby
+queryable = QueryableHash.wrap(data)
+queryable.find("this.key.does.not.exist", raise_when_nil: true) #=> raises QueryableHash::NotFoundError
+```
+
+### Set query options on the instance
+
+```ruby
+queryable = QueryableHash.wrap(data, nil_value: "missing")
+queryable.find("this.key.does.not.exist")      #=> "missing"
+queryable.find("neither.does.this.one")        #=> "missing"
+queryable.find("nor.this.one", nil_value: nil) #=> nil
+```
+
+```ruby
+queryable = QueryableHash.wrap(data, raise_when_nil: true)
+queryable.find("this.key.does.not.exist")             #=> raises QueryableHash::NotFoundError
+queryable.find("neither.does.this.one")               #=> raises QueryableHash::NotFoundError
+queryable.find("nor.this.one", raise_when_nil: false) #=> nil
+```
+
