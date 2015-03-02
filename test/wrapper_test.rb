@@ -79,6 +79,16 @@ module QueryableHash
       assert term == "Standard Generalized Markup Language"
     end
 
+    test "find_first with raise" do
+      query = "nate.this.key.does.not.exist"
+      begin
+        @queryable.find_first(query, raise_when_nil: true)
+      rescue NotFoundError => e
+      end
+
+      assert e
+    end
+
     test "to_hash" do
       assert @queryable.to_hash == @data
     end

@@ -19,12 +19,17 @@ module QueryableHash
       end
     end
 
-    def find_first(*queries, nil_value: nil)
+    def find_first(*queries, nil_value: nil, raise_when_nil: false)
       first = find_all(*queries, nil_value: nil_value).find do |result|
         result != nil_value
       end
-      first || nil_value
+      first ||= nil_value
+
+      raise NotFoundError if raise_when_nil && first == nil_value
+      first
     end
+
+    alias_method :find, :find_first
 
     def to_hash
       @original_hash
