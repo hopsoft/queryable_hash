@@ -10,7 +10,7 @@ Safely & easily find data in Hashes using dot notation queries.
 _Works with string & symbol keys._
 
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
-> It works especially well when the target API data is erratic.
+> It works especially well when the target data is erratic.
 
 ## Examples
 
