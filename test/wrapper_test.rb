@@ -63,9 +63,15 @@ module QueryableHash
       assert @queryable.find_first(query).nil?
     end
 
-    test "find_first with missing key and nil value" do
+    test "find_first with missing key and nil_value" do
       query = "nate.this.key.does.not.exist"
       assert @queryable.find_first(query, nil_value: "missing") == "missing"
+    end
+
+    test "find_first with missing key and nil_value set by instance" do
+      query = "nate.this.key.does.not.exist"
+      queryable = QueryableHash.wrap(@data, nil_value: "missing")
+      assert queryable.find_first(query) == "missing"
     end
 
     test "find_first with multiple queries some invalid" do
@@ -79,13 +85,23 @@ module QueryableHash
       assert term == "Standard Generalized Markup Language"
     end
 
-    test "find_first with raise" do
+    test "find_first with raise_when_nil" do
       query = "nate.this.key.does.not.exist"
       begin
         @queryable.find_first(query, raise_when_nil: true)
       rescue NotFoundError => e
       end
 
+      assert e
+    end
+
+    test "find_first with raise_when_nil set by instance" do
+      query = "nate.this.key.does.not.exist"
+      begin
+        queryable = QueryableHash.wrap(@data, raise_when_nil: true)
+        queryable.find_first(query)
+      rescue NotFoundError => e
+      end
       assert e
     end
 

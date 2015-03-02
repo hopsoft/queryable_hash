@@ -2,9 +2,12 @@ require "delegate"
 
 module QueryableHash
   class Wrapper < SimpleDelegator
+    attr_reader :nil_value, :raise_when_nil
 
-    def initialize(hash)
+    def initialize(hash, nil_value: nil, raise_when_nil: false)
       @original_hash = hash
+      @nil_value = nil_value
+      @raise_when_nil = raise_when_nil
       super hash
     end
 
@@ -19,7 +22,10 @@ module QueryableHash
       end
     end
 
-    def find_first(*queries, nil_value: nil, raise_when_nil: false)
+    def find_first(*queries, nil_value: nil, raise_when_nil: nil)
+      nil_value = @nil_value if nil_value.nil?
+      raise_when_nil = @raise_when_nil if raise_when_nil.nil?
+
       first = find_all(*queries, nil_value: nil_value).find do |result|
         result != nil_value
       end
