@@ -7,7 +7,8 @@
 # QueryableHash
 
 Safely & easily find data in Hashes using dot notation queries.
-_Works with string & symbol keys._
+
+_Key agnostic... think HashWithIndifferentAccess._
 
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
 > It works especially well when the target data is erratic.
@@ -70,12 +71,9 @@ queryable.find_all(
 #=> [ "example glossary",
 #     "Standard Generalized Markup Language",
 #     "A meta-markup language, used to create markup languages such as DocBook." ]
-```
 
-### Extract multiple values at once
+# or assign the results
 
-```ruby
-queryable = QueryableHash.wrap(data)
 title, term, para = queryable.find_all(
   "glossary.title",
   "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
