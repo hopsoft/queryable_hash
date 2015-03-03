@@ -8,14 +8,14 @@
 
 Safely & easily find data in Hashes using dot notation queries.
 
-_Key agnostic... think HashWithIndifferentAccess._
-
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
 > It works especially well when the target data is erratic.
 
+_Key agnostic... think HashWithIndifferentAccess._
+
 ## Examples
 
-### Data to Query
+### Data to query
 
 ```ruby
 data = {
