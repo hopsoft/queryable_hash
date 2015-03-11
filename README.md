@@ -11,8 +11,6 @@ Safely & easily find data in Hashes using dot notation queries.
 > We use QueryableHash to parse Ruby Hashes built from JSON API data.
 > It works especially well when the target data is erratic.
 
-_Key agnostic... think HashWithIndifferentAccess._
-
 ## Examples
 
 ### Data to query
@@ -121,3 +119,6 @@ queryable.find("neither.does.this.one")               #=> raises QueryableHash::
 queryable.find("nor.this.one", raise_when_nil: false) #=> nil
 ```
 
+---
+
+Also check out: [https://github.com/joshbuddy/jsonpath](https://github.com/joshbuddy/jsonpath)
