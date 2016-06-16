@@ -28,13 +28,13 @@ module QueryableHash
       @queryable = QueryableHash.wrap(@data)
     end
 
-    test "find_all" do
+    test "get_all" do
       query = "glossary.gloss_div.gloss_list.gloss_entry.id"
-      assert @queryable.find_all(query) == ["SGML"]
+      assert @queryable.get_all(query) == ["SGML"]
     end
 
-    test "find_all with multiple queries" do
-      title, term, para = @queryable.find_all(
+    test "get_all with multiple queries" do
+      title, term, para = @queryable.get_all(
         "glossary.title",
         "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
         "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
@@ -44,13 +44,13 @@ module QueryableHash
       assert para == "A meta-markup language, used to create markup languages such as DocBook."
     end
 
-    test "find_first" do
+    test "get" do
       query = "glossary.gloss_div.gloss_list.gloss_entry.id"
-      assert @queryable.find_first(query) == "SGML"
+      assert @queryable.get(query) == "SGML"
     end
 
-    test "find_first with multiple queries" do
-      result = @queryable.find_first(
+    test "get with multiple queries" do
+      result = @queryable.get(
         "glossary.title",
         "glossary.gloss_div.gloss_list.gloss_entry.gloss_term",
         "glossary.gloss_div.gloss_list.gloss_entry.gloss_def.para"
@@ -58,24 +58,24 @@ module QueryableHash
       assert result == "example glossary"
     end
 
-    test "find_first with missing key" do
+    test "get with missing key" do
       query = "this.key.does.not.exist"
-      assert @queryable.find_first(query).nil?
+      assert @queryable.get(query).nil?
     end
 
-    test "find_first with missing key and nil_value" do
+    test "get with missing key and nil_value" do
       query = "nate.this.key.does.not.exist"
-      assert @queryable.find_first(query, nil_value: "missing") == "missing"
+      assert @queryable.get(query, nil_value: "missing") == "missing"
     end
 
-    test "find_first with missing key and nil_value set by instance" do
+    test "get with missing key and nil_value set by instance" do
       query = "nate.this.key.does.not.exist"
       queryable = QueryableHash.wrap(@data, nil_value: "missing")
-      assert queryable.find_first(query) == "missing"
+      assert queryable.get(query) == "missing"
     end
 
-    test "find_first with multiple queries some invalid" do
-      term = @queryable.find_first(
+    test "get with multiple queries some invalid" do
+      term = @queryable.get(
         "glossary.div.list.entry.term",
         "glossary.gloss_div.list.entry.term",
         "glossary.gloss_div.gloss_list.entry.term",
@@ -85,21 +85,21 @@ module QueryableHash
       assert term == "Standard Generalized Markup Language"
     end
 
-    test "find_first with raise_when_nil" do
+    test "get with raise_when_nil" do
       query = "nate.this.key.does.not.exist"
       begin
-        @queryable.find_first(query, raise_when_nil: true)
+        @queryable.get(query, raise_when_nil: true)
       rescue NotFoundError => e
       end
 
       assert e
     end
 
-    test "find_first with raise_when_nil set by instance" do
+    test "get with raise_when_nil set by instance" do
       query = "nate.this.key.does.not.exist"
       begin
         queryable = QueryableHash.wrap(@data, raise_when_nil: true)
-        queryable.find_first(query)
+        queryable.get(query)
       rescue NotFoundError => e
       end
       assert e

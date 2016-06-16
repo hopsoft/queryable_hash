@@ -11,7 +11,7 @@ module QueryableHash
       super hash
     end
 
-    def find_all(*queries, nil_value: nil)
+    def get_all(*queries, nil_value: nil)
       queries.reduce([]) do |memo, query|
         context = self
         query.split(".").each do |name|
@@ -22,11 +22,11 @@ module QueryableHash
       end
     end
 
-    def find_first(*queries, nil_value: nil, raise_when_nil: nil)
+    def get(*queries, nil_value: nil, raise_when_nil: nil)
       nil_value = @nil_value if nil_value.nil?
       raise_when_nil = @raise_when_nil if raise_when_nil.nil?
 
-      first = find_all(*queries, nil_value: nil_value).find do |result|
+      first = get_all(*queries, nil_value: nil_value).find do |result|
         result != nil_value
       end
       first ||= nil_value
@@ -34,8 +34,6 @@ module QueryableHash
       raise NotFoundError.new("#{queries.join(", ")} not found") if raise_when_nil && first == nil_value
       first
     end
-
-    alias_method :find, :find_first
 
     def to_hash
       @original_hash
